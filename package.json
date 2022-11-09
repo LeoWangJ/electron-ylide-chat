@@ -9,6 +9,9 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.2.0",
+    "@ylide/ethereum": "^0.7.2",
+    "@ylide/everscale": "^0.7.2",
+    "@ylide/sdk": "^0.7.2",
     "electron": "^21.2.2",
     "electron-builder": "^23.6.0",
     "electron-updater": "^5.3.0",
