@@ -4,10 +4,10 @@ export let devPlugin = () => {
     name: "dev-plugin",
     configureServer(server: ViteDevServer) {
       require("esbuild").buildSync({
-        entryPoints: ["./src/main/entry.ts"],
+        entryPoints: ["./src/main/mainEntry.ts"],
         bundle: true,
         platform: "node",
-        outfile: "./dist/entry.js",
+        outfile: "./dist/mainEntry.js",
         external: ["electron"],
       });
       server.httpServer.once("listening", () => {
@@ -16,7 +16,7 @@ export let devPlugin = () => {
         let httpAddress = `http://${addressInfo.address}:${addressInfo.port}`;
         let electronProcess = spawn(
           require("electron").toString(),
-          ["./dist/entry.js", httpAddress],
+          ["./dist/mainEntry.js", httpAddress],
           {
             cwd: process.cwd(),
             stdio: "inherit",

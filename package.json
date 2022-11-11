@@ -8,14 +8,36 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
+    "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
+    "@metamask/post-message-stream": "^6.0.0",
+    "@metamask/providers": "^10.2.0",
     "@vitejs/plugin-vue": "^3.2.0",
+    "@walletconnect/auth-client": "^1.0.0",
+    "@walletconnect/client": "^1.8.0",
+    "@walletconnect/qrcode-modal": "^1.8.0",
+    "@walletconnect/web3-provider": "^1.8.0",
+    "@ylide/ethereum": "^0.7.2",
+    "@ylide/everscale": "^0.7.2",
+    "@ylide/sdk": "^0.7.2",
     "electron": "^21.2.2",
     "electron-builder": "^23.6.0",
     "electron-updater": "^5.3.0",
+    "ethers": "^5.7.2",
+    "events": "^3.3.0",
+    "rollup-plugin-node-polyfills": "^0.2.1",
+    "sass": "^1.56.0",
     "typescript": "^4.6.4",
     "vite": "^3.2.3",
     "vite-plugin-optimizer": "^1.4.2",
     "vue": "^3.2.41",
-    "vue-tsc": "^1.0.9"
+    "vue-router": "^4.1.6",
+    "vue-tsc": "^1.0.9",
+    "web3": "^1.8.0"
+  },
+  "dependencies": {
+    "@walletconnect/sign-client": "^2.1.1",
+    "@web3modal/core": "2.0.0-beta.3",
+    "@web3modal/ui": "2.0.0-beta.3"
   }
 }
