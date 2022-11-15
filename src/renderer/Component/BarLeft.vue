@@ -3,14 +3,32 @@ import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
 let mainWindowRoutes = ref([
-  { path: `/WindowMain/Chat`, isSelected: true, icon: `icon-chat`, iconSelected: `icon-chat` },
-  { path: `/WindowMain/Contact`, isSelected: false, icon: `icon-tongxunlu1`, iconSelected: `icon-tongxunlu` },
-  { path: `/WindowMain/Collection`, isSelected: false, icon: `icon-shoucang1`, iconSelected: `icon-shoucang` },
+  {
+    path: `/WindowMain/Chat`,
+    isSelected: true,
+    icon: `icon-chat`,
+    iconSelected: `icon-chat`,
+  },
+  {
+    path: `/WindowMain/Contact`,
+    isSelected: false,
+    icon: `icon-tongxunlu1`,
+    iconSelected: `icon-tongxunlu`,
+  },
+  {
+    path: `/WindowMain/Collection`,
+    isSelected: false,
+    icon: `icon-shoucang1`,
+    iconSelected: `icon-shoucang`,
+  },
 ]);
 let route = useRoute();
 watch(
   () => route,
-  () => mainWindowRoutes.value.forEach((v) => (v.isSelected = v.path === route.fullPath)),
+  () =>
+    mainWindowRoutes.value.forEach(
+      (v) => (v.isSelected = v.path === route.fullPath)
+    ),
   {
     immediate: true,
     deep: true,
@@ -20,11 +38,17 @@ watch(
 <template>
   <div class="BarLeft">
     <div class="userIcon">
-      <img src="../assets/avatar.jpg" alt="" />
+      <img src="../assets/ylide-io.png" alt="" />
     </div>
     <div class="menu">
-      <router-link v-for="item in mainWindowRoutes" :to="item.path" :class="[`menuItem`, { selected: item.isSelected }]">
-        <i :class="[`icon`, item.isSelected ? item.iconSelected : item.icon]"></i>
+      <router-link
+        v-for="item in mainWindowRoutes"
+        :to="item.path"
+        :class="[`menuItem`, { selected: item.isSelected }]"
+      >
+        <i
+          :class="[`icon`, item.isSelected ? item.iconSelected : item.icon]"
+        ></i>
       </router-link>
     </div>
     <div class="setting">

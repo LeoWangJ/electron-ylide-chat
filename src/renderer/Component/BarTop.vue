@@ -51,6 +51,9 @@ onUnmounted(() => {
 </template>
 <style scoped lang="scss">
 .topBar {
+  position: absolute;
+  right: 0;
+  top: 0;
   display: flex;
   height: 25px;
   line-height: 25px;

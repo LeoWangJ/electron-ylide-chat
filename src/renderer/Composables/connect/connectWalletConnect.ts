@@ -9,38 +9,34 @@ const connectWalletConnect = async () => {
     //  Enable session (triggers QR Code modal)
     await provider.enable();
 
+    console.log(1);
     const web3 = new Web3(provider);
 
     const getAccounts = await web3.eth.getAccounts();
     const address = getAccounts[0];
-
-    // var rawMessage = "Hello World";
-    // const signedMessage = await web3.eth.sign(rawMessage, address);
-
-    // console.log(signedMessage);
-    state.status = true;
-    state.address = address;
-    state.chainId = await provider.request({ method: "eth_chainId" });
+    state.value.status = true;
+    state.value.address = address;
+    state.value.chainId = await provider.request({ method: "eth_chainId" });
     setGlobalProvider(provider);
+
     provider.on("disconnect", (code, reason) => {
       console.log(code, reason);
       console.log("disconnected");
-      state.status = false;
-      state.address = "";
-      state.provider = null;
+      state.value.status = false;
+      state.value.address = "";
 
       localStorage.removeItem("userState");
     });
 
     provider.on("accountsChanged", (accounts) => {
       if (accounts.length > 0) {
-        state.address = accounts[0];
+        state.value.address = accounts[0];
       }
     });
 
     provider.on("chainChanged", (chainId) => {
       console.log(chainId);
-      state.chainId = chainId;
+      state.value.chainId = chainId;
     });
   } catch (error) {
     console.log(error);
