@@ -23,6 +23,7 @@
     "electron": "^21.2.2",
     "electron-builder": "^23.6.0",
     "electron-updater": "^5.3.0",
+    "element-plus": "^2.2.21",
     "events": "^3.3.0",
     "pinia": "^2.0.23",
     "sass": "^1.56.0",

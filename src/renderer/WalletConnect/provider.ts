@@ -1,7 +1,12 @@
 import WalletConnectProvider from "@walletconnect/web3-provider";
-
+console.log(import.meta.env.VITE_projectId);
 export const provider = new WalletConnectProvider({
-  infuraId: "1ffc4eed3eea422ba8d97821cdb5fc38",
+  rpc: {
+    42161: `https://arbitrum-mainnet.infura.io/v3/${
+      import.meta.env.VITE_projectId
+    }`,
+  },
+  infuraId: `${import.meta.env.VITE_projectId}`,
   qrcodeModalOptions: {
     mobileLinks: [
       "rainbow",

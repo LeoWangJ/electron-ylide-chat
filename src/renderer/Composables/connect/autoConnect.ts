@@ -2,16 +2,13 @@ import connect from "./index";
 
 const autoConnect = async () => {
   const { state, connectWalletConnect } = connect();
-  if (state.status) {
+  if (state.value.status) {
     if (localStorage.getItem("walletconnect") == null) {
-      console.log("disconnected");
-      console.log("disconnected");
-      state.status = false;
-      state.address = "";
+      state.value.status = false;
+      state.value.address = "";
       localStorage.removeItem("userState");
     }
     if (localStorage.getItem("walletconnect")) {
-      console.log("start");
       await connectWalletConnect();
     }
   }

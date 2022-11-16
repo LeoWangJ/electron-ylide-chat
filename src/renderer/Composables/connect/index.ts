@@ -1,15 +1,23 @@
-import { reactive, computed, watch } from "vue";
 import connectWalletConnect from "./connectWalletConnect";
 import autoConnect from "./autoConnect";
 import disconnectWallet from "./disconnectWallet";
 import { useStorage } from "@vueuse/core";
 
-const STATE_NAME = "userState";
+export const STATE_NAME = "userState";
 
-const defaultState = {
+interface State {
+  address: string;
+  chainId: string;
+  status: boolean;
+  isPublic: boolean;
+  publicKey: Uint8Array | null;
+}
+const defaultState: State = {
   address: "",
   chainId: "",
   status: false,
+  publicKey: null,
+  isPublic: false,
 };
 
 const state = useStorage(STATE_NAME, defaultState);
