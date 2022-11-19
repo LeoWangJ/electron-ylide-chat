@@ -37,7 +37,9 @@ const passwordHandler = async () => {
       });
       await publishKey();
       state.value.isPublic = true;
-
+      location.reload();
+    } else {
+      state.value.isPublic = true;
       location.reload();
     }
   } catch (e) {

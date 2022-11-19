@@ -1,5 +1,5 @@
 import WalletConnectProvider from "@walletconnect/web3-provider";
-console.log(import.meta.env.VITE_projectId);
+
 export const provider = new WalletConnectProvider({
   rpc: {
     42161: `https://arbitrum-mainnet.infura.io/v3/${

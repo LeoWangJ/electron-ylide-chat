@@ -59,6 +59,7 @@ onUnmounted(() => {
   line-height: 25px;
   -webkit-app-region: drag;
   width: 100%;
+  z-index: 99;
 }
 .winTitle {
   flex: 1;

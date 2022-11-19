@@ -63,6 +63,8 @@ const initYlide = async () => {
 
   await ylideStore.keystore.init();
   const ylide = new Ylide(ylideStore.keystore);
+  ylideStore.setYlide(ylide);
+
   const readers = [await ylide.addBlockchain("ARBITRUM")];
   ylideStore.setReaders(readers);
   await ylideStore.setWallet(ylide);

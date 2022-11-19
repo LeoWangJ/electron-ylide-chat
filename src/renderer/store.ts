@@ -15,6 +15,7 @@ export const useYlideStore = defineStore("ylide", {
       wallet: <AbstractWalletController>{},
       keystore: <YlideKeyStore>{},
       readers: <AbstractBlockchainController[]>[],
+      ylide: <Ylide>{},
     };
   },
   actions: {
@@ -63,6 +64,9 @@ export const useYlideStore = defineStore("ylide", {
     },
     async setReaders(readers: AbstractBlockchainController[]) {
       this.readers = readers;
+    },
+    async setYlide(ylide: Ylide) {
+      this.ylide = ylide;
     },
   },
 });
