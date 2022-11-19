@@ -15,7 +15,6 @@ const disabled = ref(false);
 const connectUserWallet = async () => {
   try {
     await connectWalletConnect();
-    await checkKey();
   } catch (e) {
     console.log(e);
   }
@@ -69,8 +68,10 @@ const checkKey = async () => {
   const pk = await ylideStore.readers[0].extractPublicKeyFromAddress(
     state.value.address
   );
+  console.log(pk);
   if (pk) {
     state.value.isPublic = true;
+    location.reload();
     console.log(`found public key for ${state.value.address} `);
     return pk.bytes;
   } else {
@@ -99,7 +100,10 @@ const publishKey = async () => {
       <div class="Login-btn" @click="connectUserWallet">WalletConnect</div>
     </template>
     <template v-else-if="!state.isPublic">
-      <span>Enter Ylide password for your first key</span>
+      <span
+        >Enter Ylide password for your key (If it is the first time input,will
+        be your first key)
+      </span>
       <input
         class="inputBox"
         placeholder="password"

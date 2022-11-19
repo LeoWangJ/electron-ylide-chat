@@ -3,24 +3,26 @@ import { ModelMessage } from "../../../../model/ModelMessage";
 defineProps<{ data: ModelMessage }>();
 </script>
 <template>
-  <template v-if="data.isInMsg">
-    <div class="messageItem left">
-      <div class="avatar">
-        <img :src="data.avatar" alt="" />
-      </div>
+  <template v-if="data.mine">
+    <div class="messageItem right">
       <div class="msgBox">
-        <div class="fromName">{{ data.fromName }}</div>
-        <div class="msgContent">{{ data.messageContent }}</div>
+        <div class="msgContent">{{ data.content }}</div>
+      </div>
+      <div class="avatar">
+        <img src="../../../assets/ylide-io.png" alt="" />
       </div>
     </div>
   </template>
   <template v-else>
-    <div class="messageItem right">
-      <div class="msgBox">
-        <div class="msgContent">{{ data.messageContent }}</div>
-      </div>
+    <div class="messageItem left">
       <div class="avatar">
-        <img :src="data.avatar" alt="" />
+        <img src="../../../assets/avatar.png" alt="" />
+      </div>
+      <div class="msgBox">
+        <div class="fromName">
+          {{ `${data.fromName.slice(0, 8)}...${data.fromName.slice(-6)}` }}
+        </div>
+        <div class="msgContent">{{ data.content }}</div>
       </div>
     </div>
   </template>
