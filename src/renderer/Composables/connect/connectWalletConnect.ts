@@ -15,7 +15,7 @@ const connectWalletConnect = async () => {
     const getAccounts = await web3.eth.getAccounts();
     const address = getAccounts[0];
     state.value.status = true;
-    state.value.address = address;
+    state.value.address = address.toLocaleLowerCase();
     state.value.chainId = await provider.request({ method: "eth_chainId" });
     setGlobalProvider(provider);
 
@@ -24,8 +24,12 @@ const connectWalletConnect = async () => {
       console.log("disconnected");
       state.value.status = false;
       state.value.address = "";
+      state.value.publicKey = null;
+      state.value.isPublic = false;
 
       localStorage.removeItem("userState");
+      localStorage.removeItem("walletconnect");
+      location.reload();
     });
 
     provider.on("accountsChanged", (accounts) => {

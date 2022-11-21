@@ -1,30 +1,49 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { useYlideStore } from "../../../store";
 import ChatItem from "./ChatItem.vue";
 import ChatSearch from "./ChatSearch.vue";
-let store = ref([]);
-onMounted(() => {
-  let prepareData = () => {
-    let result = [];
-    for (let i = 0; i < 10; i++) {
-      let model = {};
-      model.fromName = "聊天对象" + i;
-      model.sendTime = "昨天";
-      model.lastMsg = "这是此会话的最后一条消息" + i;
-      model.avatar = `https://pic3.zhimg.com/v2-306cd8f07a20cba46873209739c6395d_im.jpg?source=32738c0c`;
-      result.push(model);
-    }
-    result[5].isSelected = true;
-    return result;
-  };
-  store.value = prepareData();
+const ylideStore = useYlideStore();
+
+let data = ref([]);
+onMounted(async () => {
+  await getChatList();
 });
+
+const getChatList = async () => {
+  const addresses = await ylideStore.ylideChatDB.keys();
+  for (let address of addresses) {
+    const list = await ylideStore.ylideChatDB.getItem(address);
+    let item = {};
+    if (list.length) {
+      item = {
+        fromName: address,
+        sendTime: list[list.length - 1].sendTime,
+        lastMsg: list[list.length - 1].content,
+      };
+    } else {
+      item = {
+        fromName: address,
+        sendTime: "",
+        lastMsg: "",
+      };
+    }
+
+    data.value.push(item);
+  }
+};
 </script>
 <template>
   <div class="ChatList">
     <ChatSearch />
     <div class="ListBox">
-      <ChatItem :data="item" v-for="item in store" :key="item.id" />
+      <ChatItem
+        :data="item"
+        v-for="item in data"
+        :key="item.address"
+        v-bind="$attrs"
+        v-on="$attrs"
+      />
     </div>
   </div>
 </template>

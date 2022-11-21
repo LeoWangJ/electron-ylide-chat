@@ -1,17 +1,22 @@
 <script setup lang="ts">
-defineProps<{ data }>();
+defineProps<{
+  data: any;
+  selected: string;
+}>();
 </script>
 <template>
   <div
-    @click="() => {}"
-    :class="['chatItem', { chatItemSelected: data.isSelected }]"
+    @click="$emit('updateSelected', data.fromName)"
+    :class="['chatItem', { chatItemSelected: selected === data.fromName }]"
   >
     <div class="avatar">
-      <img :src="data.avatar" alt="" />
+      <img src="../../../assets/avatar.png" alt="" />
     </div>
     <div class="chatInfo">
       <div class="row">
-        <div class="fromName">{{ data.fromName }}</div>
+        <div class="fromName">
+          {{ `${data.fromName.slice(0, 4)}...${data.fromName.slice(-6)}` }}
+        </div>
         <div class="timeName">{{ data.sendTime }}</div>
       </div>
       <div class="row">

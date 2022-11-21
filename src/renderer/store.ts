@@ -7,7 +7,21 @@ import {
   YlideKeyStore,
 } from "@ylide/sdk";
 import { defineStore } from "pinia";
-import { EVMNetwork, EVM_NAMES } from "./@ylide/Ethereum";
+import { EVMNetwork, EVM_NAMES } from "@ylide/ethereum";
+
+export interface DecodedContent {
+  serviceCode: number;
+  decryptedContent: Uint8Array;
+  type: string;
+  subject: string;
+  content: any;
+  fromName: string;
+  mine: boolean;
+}
+
+export interface ChatList {
+  [key: string]: DecodedContent[];
+}
 
 export const useYlideStore = defineStore("ylide", {
   state: () => {
@@ -16,6 +30,7 @@ export const useYlideStore = defineStore("ylide", {
       keystore: <YlideKeyStore>{},
       readers: <AbstractBlockchainController[]>[],
       ylide: <Ylide>{},
+      ylideChatDB: <LocalForage>{},
     };
   },
   actions: {
@@ -67,6 +82,9 @@ export const useYlideStore = defineStore("ylide", {
     },
     async setYlide(ylide: Ylide) {
       this.ylide = ylide;
+    },
+    setDB(db: LocalForage) {
+      this.ylideChatDB = db;
     },
   },
 });

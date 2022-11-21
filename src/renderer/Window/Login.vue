@@ -4,7 +4,7 @@ import connect from "../Composables/connect";
 import BarTop from "../Component/BarTop.vue";
 import { ref } from "vue";
 import { useYlideStore } from "../store";
-import { EVMNetwork } from "../@ylide/Ethereum";
+import { EVMNetwork } from "@ylide/ethereum";
 import { ElMessage } from "element-plus";
 
 const ylideStore = useYlideStore();
@@ -15,6 +15,7 @@ const disabled = ref(false);
 const connectUserWallet = async () => {
   try {
     await connectWalletConnect();
+    location.reload();
   } catch (e) {
     console.log(e);
   }
@@ -42,6 +43,7 @@ const passwordHandler = async () => {
       location.reload();
     }
   } catch (e) {
+    console.log(e);
     ElMessage({
       message: "An error occurred",
       type: "error",

@@ -6,26 +6,13 @@ import {
   evmFactories,
   ethereumWalletFactory,
   EVMNetwork,
-  EVM_NAMES,
-} from "./@ylide/Ethereum/index";
-import {
-  Ylide,
-  IMessage,
-  MessageContentV3,
-  YlideKeyStore,
-  BrowserLocalStorage,
-  MessagesList,
-  AbstractWalletController,
-  AbstractBlockchainController,
-  WalletControllerFactory,
-  YlideKeyPair,
-  GenericEntry,
-  BlockchainSource,
-} from "@ylide/sdk";
+} from "@ylide/ethereum";
+import { Ylide } from "@ylide/sdk";
 import { useRouter } from "vue-router";
 import connect from "./Composables/connect";
 import { Duplex } from "stream";
 import { useYlideStore } from "./store";
+import { ylideChatDB } from "./Database";
 
 const router = useRouter();
 const { state, autoConnect } = connect();
@@ -40,6 +27,7 @@ onMounted(async () => {
     router.push({ name: "login" });
   }
   await initYlide();
+  ylideStore.setDB(ylideChatDB);
 });
 
 const injectEthereum = () => {
