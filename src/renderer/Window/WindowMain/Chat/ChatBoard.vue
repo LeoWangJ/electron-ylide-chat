@@ -3,43 +3,18 @@ import { onMounted, ref } from "vue";
 import { useYlideStore } from "../../../store";
 import ChatItem from "./ChatItem.vue";
 import ChatSearch from "./ChatSearch.vue";
-const ylideStore = useYlideStore();
 
-let data = ref([]);
-onMounted(async () => {
-  await getChatList();
-});
-
-const getChatList = async () => {
-  const addresses = await ylideStore.ylideChatDB.keys();
-  for (let address of addresses) {
-    const list = await ylideStore.ylideChatDB.getItem(address);
-    let item = {};
-    if (list.length) {
-      item = {
-        fromName: address,
-        sendTime: list[list.length - 1].sendTime,
-        lastMsg: list[list.length - 1].content,
-      };
-    } else {
-      item = {
-        fromName: address,
-        sendTime: "",
-        lastMsg: "",
-      };
-    }
-
-    data.value.push(item);
-  }
-};
+defineProps<{
+  chatBoardList: [];
+}>();
 </script>
 <template>
   <div class="ChatList">
-    <ChatSearch />
+    <ChatSearch v-bind="$attrs" v-on="$attrs" />
     <div class="ListBox">
       <ChatItem
         :data="item"
-        v-for="item in data"
+        v-for="item in chatBoardList"
         :key="item.address"
         v-bind="$attrs"
         v-on="$attrs"

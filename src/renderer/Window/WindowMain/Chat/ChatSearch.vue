@@ -1,11 +1,51 @@
+<script lang="ts" setup>
+import { ElMessage } from "element-plus";
+import { ref } from "vue";
+import Web3 from "web3";
+import { useYlideStore } from "../../../store";
+
+const emit = defineEmits(["updateSelected", "updateChatList"]);
+const web3 = new Web3();
+const address = ref("");
+const ylideStore = useYlideStore();
+
+const saerch = async () => {
+  let isValid = false;
+  if (!address.value) return;
+  try {
+    isValid = web3.utils.checkAddressChecksum(address.value);
+  } catch (e) {
+    isValid = false;
+  }
+  if (isValid) {
+    let chatList = await ylideStore.ylideChatDB.getItem(address.value);
+    if (!chatList) {
+      chatList = [];
+      await ylideStore.ylideChatDB.setItem(address.value, []);
+      emit("updateChatList");
+    }
+    emit("updateSelected", address.value);
+  } else {
+    ElMessage({
+      message: "invalid address",
+      type: "error",
+    });
+  }
+};
+</script>
 <template>
   <div class="chatSearch">
     <div class="searchIcon"><i class="icon icon-sousuo"></i></div>
-    <div class="inputBox" contenteditable="true" placeholder="搜索"></div>
-    <div class="searchBtn">+</div>
+    <input
+      class="inputBox"
+      v-model="address"
+      contenteditable="true"
+      @keydown.enter="saerch"
+      placeholder="chat with address"
+    />
+    <div class="searchBtn" @click="saerch">+</div>
   </div>
 </template>
-<script lang="ts" setup></script>
 <style lang="scss" scoped>
 .chatSearch {
   display: flex;

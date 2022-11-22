@@ -21,6 +21,7 @@ import dayjs from "dayjs";
 const { state } = connect();
 const ylideStore = useYlideStore();
 const selected = ref("");
+let chatBoardList = ref([]);
 
 onMounted(async () => {
   await listen();
@@ -121,9 +122,10 @@ const listen = async () => {
   );
 
   await list.resume(); // we need to activate list before we will be able to read from it
-  const messages = await list.readMore(10);
+  const messages = await list.readMore(100);
   console.log(list, messages);
   await read(messages);
+  await getChatList();
   console.log("can I read more:", list.drained);
 
   if (!list.drained) {
@@ -133,9 +135,38 @@ const listen = async () => {
 const updateSelected = (address: string) => {
   selected.value = address;
 };
+
+const getChatList = async () => {
+  chatBoardList.value = [];
+  const addresses = await ylideStore.ylideChatDB.keys();
+  for (let address of addresses) {
+    const list = await ylideStore.ylideChatDB.getItem(address);
+    let item = {};
+    if (list.length) {
+      item = {
+        fromName: address,
+        sendTime: list[list.length - 1].sendTime,
+        lastMsg: list[list.length - 1].content,
+      };
+    } else {
+      item = {
+        fromName: address,
+        sendTime: "",
+        lastMsg: "",
+      };
+    }
+
+    chatBoardList.value.push(item);
+  }
+};
 </script>
 <template>
-  <ChatBoard :selected="selected" @updateSelected="updateSelected"></ChatBoard>
+  <ChatBoard
+    :selected="selected"
+    :chatBoardList="chatBoardList"
+    @updateChatList="getChatList"
+    @updateSelected="updateSelected"
+  ></ChatBoard>
   <MessageBoard
     :selected="selected"
     @updateSelected="updateSelected"
