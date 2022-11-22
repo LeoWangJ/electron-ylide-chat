@@ -6,6 +6,8 @@ import BarTop from "../../../Component/BarTop.vue";
 import connect from "../../../Composables/connect";
 import { useYlideStore } from "../../../store";
 import MessageItem from "./MessageItem.vue";
+import dayjs from "dayjs";
+import { ElMessage } from "element-plus";
 
 let text = ref("");
 const { state } = connect();
@@ -17,7 +19,6 @@ let data = ref([]);
 watch(
   () => props.selected,
   async (cur: string, prev: string) => {
-    console.log(props.selected);
     if (cur !== prev && cur) {
       await getChatList(cur);
     }
@@ -38,24 +39,54 @@ const inputEnter = async (e: {
       text.value = text.value.replace(/[\r\n]/g, "<br />");
     } else {
       e.preventDefault();
-      await send(props.selected);
-      text.value = "";
+      if (!props.selected) return;
+      const msgId = await send(props.selected);
+      if (msgId) {
+        await setSendToDB(msgId);
+        text.value = "";
+      }
     }
   }
 };
 
+const setSendToDB = async (msgId: string) => {
+  let chatList = await ylideStore.ylideChatDB.getItem(props.selected);
+  const data = {
+    msgId: msgId,
+    content: text.value,
+    fromName: state.value.address,
+    sendTime: dayjs().format("DD.MM.YYYY"),
+    mine: true,
+  };
+  await ylideStore.ylideChatDB.setItem(props.selected, [...chatList, data]);
+  updateMessage(data);
+};
+const updateMessage = (message) => {
+  data.value = [...data.value, message];
+};
 const send = async (recipient: string) => {
   const content = MessageContentV3.plain("subject", text.value);
-  const msgId = await ylideStore.ylide.sendMessage(
-    {
-      wallet: ylideStore.wallet,
-      sender: { address: state.value.address },
-      content,
-      recipients: [recipient],
-    },
-    { network: EVMNetwork.ARBITRUM }
-  );
-  console.log(msgId);
+  ElMessage({
+    message: "sending message, Please check transaction in wallet",
+  });
+  try {
+    const msgId = await ylideStore.ylide.sendMessage(
+      {
+        wallet: ylideStore.wallet,
+        sender: { address: state.value.address },
+        content,
+        recipients: [recipient],
+      },
+      { network: EVMNetwork.ARBITRUM }
+    );
+
+    return msgId;
+  } catch (e) {
+    ElMessage({
+      message: "An error occurred",
+      type: "error",
+    });
+  }
 };
 </script>
 <template>
