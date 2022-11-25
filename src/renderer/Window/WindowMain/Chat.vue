@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, nextTick } from "vue";
 import ChatBoard from "./Chat/ChatBoard.vue";
 import MessageBoard from "./Chat/MessageBoard.vue";
 import {
@@ -22,12 +22,12 @@ const { state } = connect();
 const ylideStore = useYlideStore();
 const selected = ref("");
 let chatBoardList = ref([]);
-
+let messageTips = ref(false);
 onMounted(async () => {
   await listen();
 });
 
-const read = async (messages) => {
+const read = async (messages, isNew = false) => {
   console.log("messages:", messages);
   messages = messages.reverse();
   for (let i = 0; i < messages.length; i++) {
@@ -35,7 +35,7 @@ const read = async (messages) => {
     const content = await ylideStore.readers[0].retrieveAndVerifyMessageContent(
       message.msg
     );
-    console.log(content);
+
     if (!content || content.corrupted) {
       // check content integrity
       throw new Error("Content not found or corrupted");
@@ -56,18 +56,32 @@ const read = async (messages) => {
         message.msg,
         content
       );
-
+      let text = "";
+      // support ylide mail message
+      try {
+        let parseText = JSON.parse(decodedContent.content);
+        text = parseText.blocks[0].data.text;
+      } catch (e) {
+        text = decodedContent.content;
+      }
       await ylideStore.ylideChatDB.setItem(content.senderAddress, [
         ...chatList,
         {
           msgId: content.msgId,
-          ...decodedContent,
+          content: text,
           fromName: content.senderAddress,
           sendTime: dayjs.unix(message.msg.createdAt).format("DD.MM.YYYY"),
           mine:
             state.value.address === content.senderAddress.toLocaleLowerCase(),
+          isNew,
         },
       ]);
+      if (isNew) {
+        new Notification(content.senderAddress, {
+          body: text,
+        });
+        newMessageTips(true);
+      }
     }
   }
 };
@@ -116,24 +130,29 @@ const listen = async () => {
   list.on(
     "messages",
     async ({ messages }: { messages: IMessageWithSource[] }) => {
-      await read(messages);
+      await read(messages, true);
+      await getChatList();
       console.log(`you've got a new messages, yoohoo: `, messages);
     }
   );
 
   await list.resume(); // we need to activate list before we will be able to read from it
   const messages = await list.readMore(100);
-  console.log(list, messages);
   await read(messages);
   await getChatList();
-  console.log("can I read more:", list.drained);
 
   if (!list.drained) {
-    console.log("messages: ", await list.readMore(10));
+    const messages = await list.readMore(100);
+    await read(messages);
+    await getChatList();
   }
 };
-const updateSelected = (address: string) => {
+const updateSelected = async (address: string) => {
   selected.value = address;
+  const list = await ylideStore.ylideChatDB.getItem(address);
+  const clearNew = list.map((item) => ({ ...item, isNew: false }));
+  await ylideStore.ylideChatDB.setItem(address, clearNew);
+  await getChatList();
 };
 
 const getChatList = async () => {
@@ -147,17 +166,26 @@ const getChatList = async () => {
         fromName: address,
         sendTime: list[list.length - 1].sendTime,
         lastMsg: list[list.length - 1].content,
+        isNew: list[list.length - 1].isNew,
       };
     } else {
       item = {
         fromName: address,
         sendTime: "",
         lastMsg: "",
+        isNew: false,
       };
     }
 
     chatBoardList.value.push(item);
   }
+};
+
+const newMessageTips = (status: boolean) => {
+  messageTips.value = status;
+  nextTick(() => {
+    messageTips.value = false;
+  });
 };
 </script>
 <template>
@@ -169,6 +197,8 @@ const getChatList = async () => {
   ></ChatBoard>
   <MessageBoard
     :selected="selected"
+    :chatBoardList="chatBoardList"
+    :messageTips="messageTips"
     @updateSelected="updateSelected"
   ></MessageBoard>
 </template>

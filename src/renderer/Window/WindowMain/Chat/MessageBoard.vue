@@ -14,19 +14,20 @@ const { state } = connect();
 const ylideStore = useYlideStore();
 const props = defineProps<{
   selected: string;
+  messageTips: boolean;
 }>();
 let data = ref([]);
 watch(
-  () => props.selected,
-  async (cur: string, prev: string) => {
-    if (cur !== prev && cur) {
-      await getChatList(cur);
+  () => [props.selected, props.messageTips],
+  async (cur, prev) => {
+    if ((cur[0] !== prev[0] && cur[0]) || cur[1]) {
+      await getChatList();
     }
   }
 );
 
-const getChatList = async (address: string) => {
-  data.value = await ylideStore.ylideChatDB.getItem(address);
+const getChatList = async () => {
+  data.value = await ylideStore.ylideChatDB.getItem(props.selected);
 };
 const inputEnter = async (e: {
   keyCode: number;
@@ -57,6 +58,7 @@ const setSendToDB = async (msgId: string) => {
     fromName: state.value.address,
     sendTime: dayjs().format("DD.MM.YYYY"),
     mine: true,
+    isNew: false,
   };
   await ylideStore.ylideChatDB.setItem(props.selected, [...chatList, data]);
   updateMessage(data);

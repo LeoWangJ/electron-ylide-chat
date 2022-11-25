@@ -21,7 +21,9 @@ defineProps<{
       </div>
       <div class="row">
         <div class="lastMsg">{{ data.lastMsg }}</div>
-        <div class="subscribe"></div>
+        <div class="newMessage">
+          <div v-if="data.isNew" class="new"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -77,5 +79,17 @@ defineProps<{
   color: rgb(153, 153, 153);
   flex: 1;
   font-size: 12px;
+}
+.newMessage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.new {
+  border-radius: 50%;
+  width: 5px;
+  height: 5px;
+  background-color: red;
+  margin-right: 10px;
 }
 </style>

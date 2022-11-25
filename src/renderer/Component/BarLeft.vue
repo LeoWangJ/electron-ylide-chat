@@ -9,18 +9,18 @@ let mainWindowRoutes = ref([
     icon: `icon-chat`,
     iconSelected: `icon-chat`,
   },
-  {
-    path: `/WindowMain/Contact`,
-    isSelected: false,
-    icon: `icon-tongxunlu1`,
-    iconSelected: `icon-tongxunlu`,
-  },
-  {
-    path: `/WindowMain/Collection`,
-    isSelected: false,
-    icon: `icon-shoucang1`,
-    iconSelected: `icon-shoucang`,
-  },
+  // {
+  //   path: `/WindowMain/Contact`,
+  //   isSelected: false,
+  //   icon: `icon-tongxunlu1`,
+  //   iconSelected: `icon-tongxunlu`,
+  // },
+  // {
+  //   path: `/WindowMain/Collection`,
+  //   isSelected: false,
+  //   icon: `icon-shoucang1`,
+  //   iconSelected: `icon-shoucang`,
+  // },
 ]);
 let route = useRoute();
 watch(
@@ -51,11 +51,11 @@ watch(
         ></i>
       </router-link>
     </div>
-    <div class="setting">
+    <!-- <div class="setting">
       <div class="menuItem">
         <i class="icon icon-setting"></i>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <style scoped lang="scss">
