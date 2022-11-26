@@ -17,6 +17,7 @@ app.whenReady().then(() => {
       contextIsolation: false,
       webviewTag: true,
       spellcheck: false,
+      height: 800,
       disableHtmlFullscreenWindowResize: true,
     },
   };

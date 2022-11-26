@@ -4,7 +4,7 @@ import { ref } from "vue";
 import Web3 from "web3";
 import { useYlideStore } from "../../../store";
 
-const emit = defineEmits(["updateSelected", "updateChatList"]);
+const emit = defineEmits(["updateSelected"]);
 const web3 = new Web3();
 const address = ref("");
 const ylideStore = useYlideStore();
@@ -22,7 +22,6 @@ const saerch = async () => {
     if (!chatList) {
       chatList = [];
       await ylideStore.ylideChatDB.setItem(address.value, []);
-      emit("updateChatList");
     }
     emit("updateSelected", address.value);
   } else {

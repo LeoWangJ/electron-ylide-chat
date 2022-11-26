@@ -192,7 +192,6 @@ const newMessageTips = (status: boolean) => {
   <ChatBoard
     :selected="selected"
     :chatBoardList="chatBoardList"
-    @updateChatList="getChatList"
     @updateSelected="updateSelected"
   ></ChatBoard>
   <MessageBoard
