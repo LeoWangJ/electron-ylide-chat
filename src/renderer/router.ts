@@ -35,6 +35,10 @@ const routes = [
         path: "AccountSetting",
         component: () => import("./Window/WindowSetting/AccountSetting.vue"),
       },
+      {
+        path: "Blockchain",
+        component: () => import("./Window/WindowSetting/Blockchain.vue"),
+      },
     ],
   },
   {

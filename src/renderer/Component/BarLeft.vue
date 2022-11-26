@@ -51,11 +51,16 @@ watch(
         ></i>
       </router-link>
     </div>
-    <!-- <div class="setting">
-      <div class="menuItem">
-        <i class="icon icon-setting"></i>
-      </div>
-    </div> -->
+    <router-link
+      class="setting menuItem"
+      :class="[
+        `menuItem`,
+        { selected: route.fullPath.indexOf('/WindowSetting') !== -1 },
+      ]"
+      to="/WindowSetting/Blockchain"
+    >
+      <i class="icon icon-setting"></i>
+    </router-link>
   </div>
 </template>
 <style scoped lang="scss">

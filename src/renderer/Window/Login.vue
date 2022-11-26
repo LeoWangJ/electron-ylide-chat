@@ -102,10 +102,8 @@ const publishKey = async () => {
       <div class="Login-btn" @click="connectUserWallet">WalletConnect</div>
     </template>
     <template v-else-if="!state.isPublic">
-      <span
-        >Enter Ylide password for your key (If it is the first time input,will
-        be your first key)
-      </span>
+      <span>Enter Ylide password</span>
+      <p>If it's first time input,it will be your first key</p>
       <input
         class="inputBox"
         placeholder="password"
