@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ModelMessage } from "../../../../model/ModelMessage";
-defineProps<{ data: ModelMessage }>();
+import { Message } from "../../../types";
+
+defineProps<{ data: Message }>();
 </script>
 <template>
   <template v-if="data.mine">

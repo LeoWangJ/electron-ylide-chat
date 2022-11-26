@@ -1,24 +1,25 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { useYlideStore } from "../../../store";
+import { BoardList } from "../../../types";
 import ChatItem from "./ChatItem.vue";
 import ChatSearch from "./ChatSearch.vue";
 
 defineProps<{
-  chatBoardList: [];
+  chatBoardList: BoardList[];
+  selected: string;
 }>();
 </script>
 <template>
   <div class="ChatList">
     <ChatSearch v-bind="$attrs" v-on="$attrs" />
     <div class="ListBox">
-      <ChatItem
-        :data="item"
-        v-for="item in chatBoardList"
-        :key="item.address"
-        v-bind="$attrs"
-        v-on="$attrs"
-      />
+      <template v-for="item in chatBoardList" :key="item.fromName">
+        <ChatItem
+          :data="item"
+          v-bind="$attrs"
+          v-on="$attrs"
+          :selected="selected"
+        />
+      </template>
     </div>
   </div>
 </template>

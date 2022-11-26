@@ -18,17 +18,18 @@ import {
 import connect from "../../Composables/connect";
 import { useYlideStore } from "../../store";
 import dayjs from "dayjs";
+import { BoardList, ChatList } from "../../types";
 const { state } = connect();
 const ylideStore = useYlideStore();
 const selected = ref("");
-let chatBoardList = ref([]);
+
+let chatBoardList = ref<BoardList[]>([]);
 let messageTips = ref(false);
 onMounted(async () => {
   await listen();
 });
 
-const read = async (messages, isNew = false) => {
-  console.log("messages:", messages);
+const read = async (messages: any, isNew = false) => {
   messages = messages.reverse();
   for (let i = 0; i < messages.length; i++) {
     let message = messages[i];
@@ -41,15 +42,18 @@ const read = async (messages, isNew = false) => {
       throw new Error("Content not found or corrupted");
     }
     if (messages.length - 1 === i) selected.value = content.senderAddress;
-    let chatList = await ylideStore.ylideChatDB.getItem(content.senderAddress);
-    console.log("chatList:", chatList);
+    let chatList = (await ylideStore.ylideChatDB.getItem(
+      content.senderAddress
+    )) as ChatList[];
     if (!chatList) {
       chatList = [];
       await ylideStore.ylideChatDB.setItem(content.senderAddress, []);
     } else {
     }
 
-    const msgIdList = chatList ? chatList.map((item) => item.msgId) : [];
+    const msgIdList = chatList
+      ? (chatList.map((item) => item.msgId) as unknown as string[])
+      : [];
     if (!msgIdList.includes(content.msgId)) {
       const decodedContent = await ylideStore.ylide.decryptMessageContent(
         { address: state.value.address, blockchain: "", publicKey: null },
@@ -110,7 +114,7 @@ const listen = async () => {
 
   const listSource1 = readingSession.listSource(
     {
-      blockchain: ylideStore.wallet,
+      blockchain: ylideStore.wallet as any,
       type: BlockchainSourceType.DIRECT,
       recipient: ylideStore.wallet.addressToUint256(state.value.address),
       sender: null,
@@ -119,7 +123,7 @@ const listen = async () => {
   );
   const listSource2 = readingSession.listSource(
     {
-      blockchain: ylideStore.wallet,
+      blockchain: ylideStore.wallet as any,
       type: BlockchainSourceType.BROADCAST,
       sender: state.value.address,
     },
@@ -148,8 +152,9 @@ const listen = async () => {
   }
 };
 const updateSelected = async (address: string) => {
+  console.log(address);
   selected.value = address;
-  const list = await ylideStore.ylideChatDB.getItem(address);
+  const list = (await ylideStore.ylideChatDB.getItem(address)) as ChatList[];
   const clearNew = list.map((item) => ({ ...item, isNew: false }));
   await ylideStore.ylideChatDB.setItem(address, clearNew);
   await getChatList();
@@ -159,7 +164,7 @@ const getChatList = async () => {
   chatBoardList.value = [];
   const addresses = await ylideStore.ylideChatDB.keys();
   for (let address of addresses) {
-    const list = await ylideStore.ylideChatDB.getItem(address);
+    const list = (await ylideStore.ylideChatDB.getItem(address)) as ChatList[];
     let item = {};
     if (list.length) {
       item = {
@@ -177,7 +182,7 @@ const getChatList = async () => {
       };
     }
 
-    chatBoardList.value.push(item);
+    chatBoardList.value.push(item as BoardList);
   }
 };
 

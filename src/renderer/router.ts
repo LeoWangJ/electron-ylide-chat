@@ -1,8 +1,7 @@
 import * as VueRouter from "vue-router";
 
-const routes = [
+const routes: any = [
   { path: "/" },
-
   {
     path: "/Login",
     name: "login",

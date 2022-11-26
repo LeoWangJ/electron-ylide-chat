@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { MessageContentV3 } from "@ylide/sdk";
-import { onMounted, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { EVMNetwork } from "@ylide/ethereum";
 import BarTop from "../../../Component/BarTop.vue";
 import connect from "../../../Composables/connect";
@@ -8,6 +8,7 @@ import { useYlideStore } from "../../../store";
 import MessageItem from "./MessageItem.vue";
 import dayjs from "dayjs";
 import { ElMessage } from "element-plus";
+import { ChatList, Message } from "../../../types";
 
 let text = ref("");
 const { state } = connect();
@@ -16,7 +17,7 @@ const props = defineProps<{
   selected: string;
   messageTips: boolean;
 }>();
-let data = ref([]);
+let data = ref<Message[]>([]);
 watch(
   () => [props.selected, props.messageTips],
   async (cur, prev) => {
@@ -27,7 +28,9 @@ watch(
 );
 
 const getChatList = async () => {
-  data.value = await ylideStore.ylideChatDB.getItem(props.selected);
+  data.value = (await ylideStore.ylideChatDB.getItem(
+    props.selected
+  )) as Message[];
 };
 const inputEnter = async (e: {
   keyCode: number;
@@ -51,8 +54,10 @@ const inputEnter = async (e: {
 };
 
 const setSendToDB = async (msgId: string) => {
-  let chatList = await ylideStore.ylideChatDB.getItem(props.selected);
-  const data = {
+  let chatList = (await ylideStore.ylideChatDB.getItem(
+    props.selected
+  )) as ChatList[];
+  const data: Message = {
     msgId: msgId,
     content: text.value,
     fromName: state.value.address,
@@ -63,7 +68,7 @@ const setSendToDB = async (msgId: string) => {
   await ylideStore.ylideChatDB.setItem(props.selected, [...chatList, data]);
   updateMessage(data);
 };
-const updateMessage = (message) => {
+const updateMessage = (message: Message) => {
   data.value = [...data.value, message];
 };
 const send = async (recipient: string) => {
@@ -74,8 +79,8 @@ const send = async (recipient: string) => {
   try {
     const msgId = await ylideStore.ylide.sendMessage(
       {
-        wallet: ylideStore.wallet,
-        sender: { address: state.value.address },
+        wallet: ylideStore.wallet as any,
+        sender: { address: state.value.address } as any,
         content,
         recipients: [recipient],
       },
@@ -95,7 +100,7 @@ const send = async (recipient: string) => {
   <div class="MessageBord">
     <BarTop />
     <div class="MessageList">
-      <MessageItem :data="item" v-for="item in data" :key="item.id" />
+      <MessageItem :data="item" v-for="item in data" :key="item.msgId" />
     </div>
     <div class="MessageTextArea">
       <textarea

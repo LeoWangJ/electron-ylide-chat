@@ -9,20 +9,6 @@ import {
 import { defineStore } from "pinia";
 import { EVMNetwork, EVM_NAMES } from "@ylide/ethereum";
 
-export interface DecodedContent {
-  serviceCode: number;
-  decryptedContent: Uint8Array;
-  type: string;
-  subject: string;
-  content: any;
-  fromName: string;
-  mine: boolean;
-}
-
-export interface ChatList {
-  [key: string]: DecodedContent[];
-}
-
 export const useYlideStore = defineStore("ylide", {
   state: () => {
     return {

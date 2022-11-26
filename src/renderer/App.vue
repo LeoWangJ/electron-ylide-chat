@@ -50,7 +50,7 @@ const initYlide = async () => {
   Ylide.registerWalletFactory(ethereumWalletFactory);
 
   await ylideStore.keystore.init();
-  const ylide = new Ylide(ylideStore.keystore);
+  const ylide = new Ylide(ylideStore.keystore as any);
   ylideStore.setYlide(ylide);
 
   const readers = [await ylide.addBlockchain("ARBITRUM")];

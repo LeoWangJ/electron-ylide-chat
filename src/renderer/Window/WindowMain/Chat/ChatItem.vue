@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { BoardList } from "../../../types";
+
 defineProps<{
-  data: any;
+  data: BoardList;
   selected: string;
 }>();
 </script>
