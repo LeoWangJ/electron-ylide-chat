@@ -24,7 +24,7 @@ app.whenReady().then(() => {
 
   mainWindow = new BrowserWindow(config);
 
-  mainWindow.webContents.openDevTools({ mode: "undocked" });
+  // mainWindow.webContents.openDevTools({ mode: "undocked" });
   if (process.argv[2]) {
     mainWindow.loadURL(process.argv[2]);
   } else {
