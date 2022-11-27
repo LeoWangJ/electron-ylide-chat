@@ -40,7 +40,6 @@ export let getReplacer = () => {
     "child_process",
     "crypto",
     "http",
-    "buffer",
     "url",
     "better-sqlite3",
     "knex",
