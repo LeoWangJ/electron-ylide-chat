@@ -1,16 +1,80 @@
-# Vue 3 + TypeScript + Vite
+# Project Name
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+electron-ylide-chat
 
-## Recommended IDE Setup
+# Project description
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+This project is a desktop application chat system.
 
-## Type Support For `.vue` Imports in TS
+Project use electron to build desktop application, connect wallet by scan the QRCode on the desktop application through the mobile phone.
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+It is more convenient for users to chat with other address by using desktop application.
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
+## support feature
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+- chat with other address
+- you can add new address to chat by search bar
+- support Arbitrum mainnet
+- support rainbow、metamask、argent、trust、imtoken、pillar wallet to scan walletconnect qrcode
+
+# Future
+
+1. Currently we only provide Arbitrum mainnet, It will support more chain like Ethereum、BNB Chain、Avalanche、Everscale ...
+
+2. add contracts list that make users find the address to chat faster
+
+The desktop application will continue to optimize ..., Please wait for our good news！
+
+# Project run
+
+```
+pnpm install
+pnpm dev
+```
+
+📝 you need to write your infura id in env VITE_projectId
+
+# Project requirements
+
+- Node v16.14.0
+
+# Demo by youtube
+
+- [youtube](https://youtu.be/DPiCjQLPe3s)
+
+# Demo by Picture
+
+- Use your mobile phone to scan the code QRCode to log in
+
+![](./public/login.png)
+![](./public/scan.png)
+
+- input your communication key (If it's first time input, you need to registering communication key)
+
+![](./public/password.png)
+
+- you can chat with other address
+
+![](./public/chat.png)
+
+- If you want to add new address to chat, you can use search bar
+
+![](./public/new_address.png)
+
+- Currently only provided Arbitrum chain, in the future, you can change chain in this section
+
+![](./public/blockchain.png)
+
+- Currently only provided log out, in the future, ylide protocal support more relate account setting, we will support it.
+
+![](./public/logout.png)
+
+# Team
+
+[leowang](https://github.com/LeoWangJ)
+
+# Contact Info
+
+- Discord ID - leoJ#5012
+- Email ID - [rfv7855659@gmail.com](mailto:rfv7855659@gmail.com)
+- Gitcoin - [leowangj](https://gitcoin.co/leowangj)
